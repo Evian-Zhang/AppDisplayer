@@ -20,7 +20,7 @@ class AppDelegate: NSObject, NSApplicationDelegate {
     var baseImage: NSImage?
     var processingImage: NSImage?
     var processedImage: NSImage?
-    var processRect = NSMakeRect(223, 145, 1462, 915)
+    var processRect = NSMakeRect(222, 144, 1464, 917)
 
     func applicationDidFinishLaunching(_ aNotification: Notification) {
         // Insert code here to initialize your application
@@ -92,8 +92,13 @@ class AppDelegate: NSObject, NSApplicationDelegate {
         
         let xScale = self.processRect.width / self.processingImage!.size.width
         let yScale = self.processRect.height / self.processingImage!.size.height
-        let scale = xScale < yScale ? xScale : yScale
-        self.processingImage!.draw(in: NSMakeRect(self.processRect.origin.x, self.processRect.origin.y, self.processingImage!.size.width * scale, self.processingImage!.size.height * scale))
+        if xScale < yScale {
+            self.processingImage!.draw(in: NSMakeRect(self.processRect.origin.x, self.processRect.origin.y, self.processRect.width, self.processingImage!.size.height * yScale))
+        } else if xScale == yScale {
+            self.processingImage!.draw(in: NSMakeRect(self.processRect.origin.x, self.processRect.origin.y, self.processRect.width, self.processRect.height))
+        } else {
+            self.processingImage!.draw(in: NSMakeRect(self.processRect.origin.x, self.processRect.origin.y, self.processingImage!.size.width * xScale, self.processRect.height))
+        }
         
         NSGraphicsContext.restoreGraphicsState()
         
